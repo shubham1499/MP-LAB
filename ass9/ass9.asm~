@@ -1,0 +1,97 @@
+%macro print 4
+mov rax,%1
+mov rdi,%2
+mov rsi,%3
+mov rdx,%4
+syscall
+%endmacro
+
+section .data
+
+cnt db 00h
+ans db "The Factorial Is  "
+len equ $-ans
+
+section .bss
+num resb 00h
+result resb 00h
+
+section .text
+global _start
+_start:
+
+pop rsi
+pop rsi
+pop rsi
+
+call atoh
+cmp rbx,0h
+jnz out
+
+
+mov rax,1h
+call htoa
+jmp EXIT
+
+out:
+mov rax,01h
+call fact
+mov rbx,rax
+call htoa
+jmp EXIT
+
+fact:
+cmp rbx,01h
+je return1
+mul rbx
+dec rbx
+call fact
+return1:
+ret
+
+htoa:
+
+    mov r8,num
+    mov byte[cnt],20h
+    up:rol rax,04
+     mov cl,al
+    AND cl,0fh
+    cmp cl,09h
+    jbe l2
+    ADD cl,07h
+     l2:ADD cl,30h
+    mov byte[r8],cl
+    inc r8
+    dec byte[cnt]
+    jnz up
+    print 1,1,ans,len
+    print 1,1,num,16
+    RET
+
+
+
+atoh:
+mov rcx,02
+mov rbx,0
+mov rax,0
+up1:
+rol bl,4
+mov al,[rsi]
+cmp al,39h
+jbe skip
+sub al,7h
+skip:
+sub al,30h
+add al,bl
+mov bl,al
+inc rsi
+loop up1
+ret
+
+EXIT:
+
+ mov rax,60
+ mov rdi,0
+ syscall
+
+

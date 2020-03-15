@@ -11,3 +11,4 @@ Microprocessor Lab Assignments
 9. Factorial of number
 10. Mean,variance,standard deviation
 11. Roots of Quadratic equation
+12. TASM
